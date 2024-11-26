@@ -76,6 +76,7 @@ struct one_dim {
 								 int64_t,
 								 double,
 								 float,
+								 std::vector<double>,
 								 std::string
 								>;
 };
@@ -100,6 +101,7 @@ struct two_dim {
 								 int64_t,
 								 double,
 								 float,
+								 std::vector<double>,
 								 std::string
 								>;
 };
@@ -124,6 +126,7 @@ struct three_dim {
 								 int64_t,
 								 double,
 								 float,
+								 std::vector<double>,
 								 std::string
 								>;
 };

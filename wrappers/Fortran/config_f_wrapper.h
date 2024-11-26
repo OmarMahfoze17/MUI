@@ -68,7 +68,8 @@ struct mui_f_wrapper_1D {
 	using data_types = type_list<int32_t,		//- Data types that can be used in the interface
 	int64_t,
 	double,
-	float
+	float,
+	point<REAL,3>
 	>;
 };
 
@@ -89,7 +90,8 @@ struct mui_f_wrapper_2D {
 	using data_types = type_list<int32_t,		//- Data types that can be used in the interface
 	int64_t,
 	double,
-	float
+	float,
+	point<REAL,3>
 	>;
 };
 
@@ -110,7 +112,8 @@ struct mui_f_wrapper_3D {
 	using data_types = type_list<int32_t,		//- Data types that can be used in the interface
 	int64_t,
 	double,
-	float
+	float,
+	point<REAL,3>
 	>;
 };
 

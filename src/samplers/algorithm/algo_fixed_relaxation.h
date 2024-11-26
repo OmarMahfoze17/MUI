@@ -63,14 +63,22 @@ public:
     using point_type = typename CONFIG::point_type;
 
     algo_fixed_relaxation( REAL under_relaxation_factor = 1.0,
-       MPI_Comm local_comm = MPI_COMM_NULL,
        std::vector<std::pair<point_type, REAL>> pts_value_init =
-        std::vector<std::pair<point_type, REAL>>() ):
+        std::vector<std::pair<point_type, REAL>>(),
+        MPI_Comm local_comm = MPI_COMM_NULL ):
        init_under_relaxation_factor_(under_relaxation_factor),
        local_mpi_comm_world_(local_comm) {
 
+        initialise(under_relaxation_factor, pts_value_init);
+        
+    }
+
+    void initialise(REAL under_relaxation_factor = 1.0,
+       std::vector<std::pair<point_type, REAL>> pts_value_init =
+        std::vector<std::pair<point_type, REAL>>())
+    {
         minimum_iterator_ = 1;
-        under_relaxation_factor_ = init_under_relaxation_factor_;
+        under_relaxation_factor_ = under_relaxation_factor;
 
         if (!pts_value_init.empty()) {
             pts_time_value_.insert(pts_time_value_.begin(),
@@ -84,6 +92,11 @@ public:
         }
     }
 
+    void setUnderRelaxationFactor(REAL under_relaxation_factor = 1.0) {
+        printf("Fixed relaxation coupling algo: Update the Under Relaxation Factor to %f \n ", under_relaxation_factor );
+        under_relaxation_factor_ = under_relaxation_factor;
+    }
+
     //- relaxation based on single time value
     template<typename OTYPE>
     OTYPE relaxation(std::pair<time_type, iterator_type> t, point_type focus, OTYPE filtered_value) const {
@@ -91,7 +104,6 @@ public:
         OTYPE filtered_old_value = 0.0;
 
         if (pts_time_value_.empty()) {
-
             assert(pts_time_res_.empty());
 
             filtered_old_value = 0.0;
@@ -327,7 +339,6 @@ public:
                             } else {
                                 MPI_Allreduce(&local_residual_mag_sq_sum_temp, &residual_mag_sq_sum_temp, 1, MPI_DOUBLE, MPI_SUM, local_mpi_comm_world_);
                             }
-
                             if((residual_mag_sq_sum_temp != 0) || (!residual_l2_norm_.empty())){
                                 residual_l2_norm_.insert(residual_l2_norm_.begin(),
                                     std::make_pair(

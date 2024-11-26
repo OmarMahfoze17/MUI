@@ -1,0 +1,6 @@
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/edit_cache.dir
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/rebuild_cache.dir
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/list_install_components.dir
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/install.dir
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/install/local.dir
+/home/omar/WORK/OpenFOAM/OpenFOAM-v2206/OpenFOAM-v2206-org/ThirdParty-v2206/sources/MUI/CMakeFiles/install/strip.dir

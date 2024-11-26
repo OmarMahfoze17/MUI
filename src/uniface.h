@@ -51,6 +51,7 @@
 
 #ifndef UNIFACE_H_
 #define UNIFACE_H_
+#include <iostream>
 
 #include "general/util.h"
 #include "communication/comm.h"
@@ -259,25 +260,25 @@ public:
 		peer_is_sending.resize(comm->remote_size(), true);
 
 		readers.link("timestamp", reader_variables<int32_t, std::pair<time_type,iterator_type> >(
-					 std::bind(&uniface::on_recv_confirm, this, _1, _2)));
+					 std::bind(&uniface::on_recv_confirm, this, std::placeholders:: _1, std::placeholders:: _2)));
 		readers.link("forecast", reader_variables<int32_t, std::pair<time_type,iterator_type>>(
-					 std::bind(&uniface::on_recv_forecast, this, _1, _2)));
+					 std::bind(&uniface::on_recv_forecast, this, std::placeholders:: _1, std::placeholders:: _2)));
 		readers.link("data", reader_variables<std::pair<time_type,iterator_type>, frame_type>(
-					 std::bind(&uniface::on_recv_data, this, _1, _2)));
+					 std::bind(&uniface::on_recv_data, this, std::placeholders:: _1, std::placeholders:: _2)));
 		readers.link("rawdata", reader_variables<int32_t, std::pair<time_type,iterator_type>, frame_raw_type>(
-					 std::bind(&uniface::on_recv_rawdata, this, _1, _2, _3)));
+					 std::bind(&uniface::on_recv_rawdata, this, std::placeholders::_1, std::placeholders::_2,std::placeholders:: _3)));
 		readers.link("points", reader_variables<int32_t, std::vector<point_type>>(
-					 std::bind(&uniface::on_recv_points, this, _1, _2)));
+					 std::bind(&uniface::on_recv_points, this,std::placeholders:: _1, std::placeholders:: _2)));
 		readers.link("assignedVals", reader_variables<std::string, storage_single_t>(
-					 std::bind(&uniface::on_recv_assignedVals, this, _1, _2)));
+					 std::bind(&uniface::on_recv_assignedVals, this,std::placeholders:: _1,std::placeholders:: _2)));
 		readers.link("receivingSpan", reader_variables<int32_t, time_type,time_type, span_t>(
-		       std::bind(&uniface::on_recv_span, this, _1, _2, _3, _4)));
+		       std::bind(&uniface::on_recv_span, this, std::placeholders:: _1,std::placeholders:: _2,std::placeholders:: _3,std::placeholders:: _4)));
 		readers.link("sendingSpan", reader_variables<int32_t, time_type,time_type, span_t>(
-		       std::bind(&uniface::on_send_span, this, _1, _2, _3, _4)));
+		       std::bind(&uniface::on_send_span, this,std::placeholders:: _1,std::placeholders:: _2,std::placeholders:: _3,std::placeholders:: _4)));
 		readers.link("receivingDisable", reader_variables<int32_t>(
-					 std::bind(&uniface::on_send_disable, this, _1)));
+					 std::bind(&uniface::on_send_disable, this,std::placeholders:: _1)));
 		readers.link("sendingDisable", reader_variables<int32_t>(
-					 std::bind(&uniface::on_recv_disable, this, _1)));
+					 std::bind(&uniface::on_recv_disable, this,std::placeholders:: _1)));
 	}
 
 	uniface( const uniface& ) = delete;
@@ -450,10 +451,19 @@ public:
 		   SAMPLER& sampler, const TIME_SAMPLER &t_sampler, bool barrier_enabled = true,
 		   ADDITIONAL && ... additional ) {
 		// Only enter barrier on first fetch for time=t
-		if( fetch_t_hist_ != t && barrier_enabled )
+		
+		if( fetch_t_hist_ != t && barrier_enabled ){
+			auto t0 = std::chrono::system_clock::now();
 			barrier(t_sampler.get_upper_bound(t));
+			auto t1 = std::chrono::system_clock::now();
+			std::chrono::duration<double> elapsed_seconds = t1-t0;
+
+			std::cout << " barrier time is "<<  elapsed_seconds.count() << " (s)" <<std::endl;
+
+		}
 
 		fetch_t_hist_ = t;
+
 
 		std::vector<std::pair<std::pair<time_type,iterator_type>,typename SAMPLER::OTYPE> > v;
 		std::pair<time_type,iterator_type> curr_time_lower(t_sampler.get_lower_bound(t)-threshold(t),
@@ -790,6 +800,9 @@ public:
 	  }
 	}
 
+	int get_sendig_peers_size(){
+		return std::count( peer_is_sending.begin(),peer_is_sending.end(),true );
+	}
 	/** \brief Sends a forecast of an upcoming time to remote nodes
 	*/
 	void forecast( time_type t, iterator_type it = std::numeric_limits<iterator_type>::lowest()) {

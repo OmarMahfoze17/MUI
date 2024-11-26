@@ -1,18 +1,18 @@
 # Define compilers and MPI run option
-FC=mpifort
+FC=mpif90
 CCX=mpic++
 MPI=mpirun
 AR=ar
 
 # C compilation flags
-FFLAGS = -O3 -cpp -std=f2003 -fcheck=all -Wall
+FFLAGS = -O3 -cpp -std=f2003 -fcheck=all -Wall -lstdc++ -lmpi_cxx
 # C++ compilation flags
-CXXFLAGS = -O3 -std=c++11 -fpic -shared
+CXXFLAGS = -O3 -std=c++11 -fpic -shared -lstdc++ -lmpi_cxx
 
-default: mui_f_wrapper_general.o mui_f_wrapper_1d.o mui_f_wrapper_2d.o mui_f_wrapper_3d.o mui_f_wrapper_general.mod mui_f_wrapper_1d.mod mui_f_wrapper_2d.mod mui_f_wrapper_3d.mod
+default: mui_f_wrapper_general.o  mui_f_wrapper_3d.o mui_f_wrapper_general.mod  mui_f_wrapper_3d.mod
 	 @echo "Compiling and linking MUI Fortran wrapper..."
-	 ${CCX} ${CXXFLAGS} -o libMUI_Fortran_wrapper.so mui_f_wrapper_general.o mui_f_wrapper_1d.o mui_f_wrapper_2d.o mui_f_wrapper_3d.o
-	 ${AR} rcs libMUI_Fortran_wrapper.a mui_f_wrapper_general.o mui_f_wrapper_1d.o mui_f_wrapper_2d.o mui_f_wrapper_3d.o
+	 ${CCX} ${CXXFLAGS} -o libMUI_Fortran_wrapper.so mui_f_wrapper_general.o  mui_f_wrapper_3d.o
+	 ${AR} rcs libMUI_Fortran_wrapper.a mui_f_wrapper_general.o  mui_f_wrapper_3d.o
 
 mui_f_wrapper_general.o: mui_f_wrapper_general.cpp
 	 @echo "Generating MUI Fortran wrapper general object file..."

@@ -56,13 +56,16 @@
 #include "comm_factory.h"
 #include "message/message.h"
 #include "../storage/stream.h"
+#include <condition_variable>
 
 namespace mui {
 
 class comm_mpi_smart : public comm_mpi {
 private:
 	std::list<std::pair<MPI_Request,std::shared_ptr<std::vector<char> > > > send_buf;
-
+	std::mutex recv_mutex_;
+	std::condition_variable recv_cv_;
+	std::list<message> mesgs_;
 public:
 	comm_mpi_smart( const char URI[], const bool quiet, MPI_Comm world = MPI_COMM_WORLD ) : comm_mpi(URI, quiet, world) {}
 	virtual ~comm_mpi_smart() {
@@ -88,6 +91,8 @@ private:
 				          domain_remote_, &(send_buf.back().first));
 		 	}
 		}
+		// std::cout << "send_buf.emplace_back "<< send_buf.back().second->size() <<std::endl;
+
 
 		// Call non-blocking MPI_Test on outstanding MPI_Isend messages in buffer and if complete, pop
 		test_completion();
@@ -103,12 +108,25 @@ private:
 		MPI_Get_count(&status, MPI_BYTE, &count);
 		std::vector<char> rcv_buf(count);
 		MPI_Recv( rcv_buf.data(), count, MPI_BYTE, status.MPI_SOURCE, status.MPI_TAG, domain_remote_, MPI_STATUS_IGNORE );
-
+		// std::cout << "recv_impl_ : rcv_buf.data() "<< rcv_buf.data() << " Count "<< count <<std::endl;
+		// for (char c : rcv_buf) {
+		// 	std::cout << c;
+		// }
+		// std::cout << std::endl;
 		// Catch any unsent MPI_Isend calls, non-blocking
 		test_completion();
 
 		return message::make(std::move(rcv_buf));
 	}
+
+	// message recv_impl_() {
+	// 	std::unique_lock<std::mutex> lock(recv_mutex_);
+	// 	recv_cv_.wait(lock, [=](){ return !mesgs_.empty(); });
+	// 	message msg = std::move(mesgs_.front());
+	// 	mesgs_.pop_front();
+	// 	return msg;
+	// }
+
 
 	/** \brief Non-blocking check for complete MPI_Isend calls
 	 */

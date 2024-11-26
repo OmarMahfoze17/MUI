@@ -312,7 +312,7 @@ vexpr_scale<E, SCALAR, D> operator * ( SCALAR const a, vexpr<E,SCALAR,D> const &
 }
 
 template<class E, typename SCALAR, uint D> inline
-vexpr_scale<E, SCALAR, D> operator / ( vexpr<E,SCALAR,D> const &u, SCALAR const a ) {
+vexpr_rscale<E, SCALAR, D> operator / ( vexpr<E,SCALAR,D> const &u, SCALAR const a ) {
 	return vexpr_rscale<E, SCALAR, D>( u, a );
 }
 

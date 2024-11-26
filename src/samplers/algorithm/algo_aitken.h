@@ -65,18 +65,29 @@ public:
 
     algo_aitken( REAL under_relaxation_factor = 1.0,
        REAL under_relaxation_factor_max = 1.0,
-      MPI_Comm local_comm = MPI_COMM_NULL,
        std::vector<std::pair<point_type, REAL>> pts_vlu_init =
         std::vector<std::pair<point_type, REAL>>(),
-       REAL res_l2_norm_nm1 = 0.0):
+       REAL res_l2_norm_nm1 = 0.0,
+       MPI_Comm local_comm = MPI_COMM_NULL):
       init_under_relaxation_factor_(under_relaxation_factor),
       under_relaxation_factor_max_(under_relaxation_factor_max),
       local_mpi_comm_world_(local_comm) {
+
+        initialise( under_relaxation_factor,under_relaxation_factor_max,
+                    pts_vlu_init,res_l2_norm_nm1,local_comm);
+    }
+
+    void initialise( REAL under_relaxation_factor = 1.0,
+       REAL under_relaxation_factor_max = 1.0,      
+       std::vector<std::pair<point_type, REAL>> pts_vlu_init =
+        std::vector<std::pair<point_type, REAL>>(),
+       REAL res_l2_norm_nm1 = 0.0,
+       MPI_Comm local_comm = MPI_COMM_NULL){
         minimum_iterator_ = 1;
         under_relaxation_factor_.insert(under_relaxation_factor_.begin(),
             std::make_pair(std::make_pair(
                 std::numeric_limits<time_type>::lowest(),
-                (minimum_iterator_ -1)), init_under_relaxation_factor_
+                (minimum_iterator_ -1)), under_relaxation_factor
             )
         );
 
@@ -99,6 +110,18 @@ public:
                 )
             );
         }
+    }
+
+    void setUnderRelaxationFactor(REAL under_relaxation_factor = 1.0) {
+        printf("Aitken coupling algo: Update the Under Relaxation Factor to %f \n ", under_relaxation_factor );
+        init_under_relaxation_factor_= under_relaxation_factor;
+        under_relaxation_factor_.insert(under_relaxation_factor_.begin(),
+            std::make_pair(std::make_pair(
+                std::numeric_limits<time_type>::lowest(),
+                (minimum_iterator_ -1)), under_relaxation_factor
+            )
+        );       
+
     }
 
     //- relaxation based on single time value
@@ -971,7 +994,7 @@ private:
     }
 
 protected:
-    const REAL init_under_relaxation_factor_;
+    REAL init_under_relaxation_factor_;
 
     const REAL under_relaxation_factor_max_;
 

@@ -150,6 +150,7 @@ public:
             M_ap_(pouSize),
             local_rank_(0),
             local_size_(0) {
+                std::cout << "(((((((((((((((( constructor generateMatrix )))))))))))))))) "<< generateMatrix <<std::endl;
         //set s to give rbf(r)=cutOff (default 1e-9)
         s_ = std::pow(-std::log(cutOff), 0.5) / r_;
         twor_ = r_ * r_;
@@ -175,8 +176,13 @@ public:
             #else //Handle creation otherwise
               createError = mkdir(writeFileAddress_.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
             #endif
-            if (createError != 0 && createError != EEXIST)
-              EXCEPTION(std::runtime_error("MUI Error [sampler_rbf.h]: Problem creating RBF matrix folder"));
+            
+            if (createError != 0 && createError != EEXIST){
+            std::cout << "create Error = "<< createError <<std::endl;
+            
+            // EXCEPTION(std::runtime_error("MUI Error [sampler_rbf.h]: Problem creating RBF matrix folder"));
+            }
+            //   
         }
     }
 
@@ -186,14 +192,15 @@ public:
 
       // RBF matrix not yet created
       if (!initialised_) {
+        std::cout << "(((((((((((((((( generateMatrix_ )))))))))))))))) "<< generateMatrix_ <<std::endl;
           if (generateMatrix_) { // Generating the matrix
-              const clock_t begin_time = std::clock();
+              //const clock_t begin_time = clock();
               facilitateGhostPoints();
               REAL error = computeRBFtransformationMatrix(data_points, writeFileAddress_);
 
               if (!QUIET) {
-                   std::cout << "MUI [sampler_rbf.h]: Matrices generated in: "
-                             << static_cast<double>(std::clock() - begin_time) / CLOCKS_PER_SEC << "s ";
+                //   std::cout << "MUI [sampler_rbf.h]: Matrices generated in: "
+                  //           << static_cast<double>(clock() - begin_time) / CLOCKS_PER_SEC << "s ";
                    if (generateMatrix_) {
                        std::cout << std::endl
                                  << "                     Average CG error: " << error << std::endl;

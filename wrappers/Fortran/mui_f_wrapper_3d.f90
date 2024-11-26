@@ -245,6 +245,13 @@ module mui_3d_f
       real(kind=c_double), intent(in) :: tolerance
     end subroutine mui_create_sampler_exact_3d_f
 
+    subroutine mui_create_sampler_exact_3d_vector(sampler,tolerance) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double), intent(in) :: tolerance
+    end subroutine mui_create_sampler_exact_3d_vector
+
+
     subroutine mui_create_sampler_exact_3dx_f(sampler,tolerance) bind(C)
       import :: c_ptr,c_double
       type(c_ptr), intent(out), target :: sampler
@@ -275,6 +282,13 @@ module mui_3d_f
       type(c_ptr), intent(out), target :: sampler
       real(kind=c_double), intent(in) :: r,h
     end subroutine mui_create_sampler_gauss_3d_f
+
+    subroutine mui_create_sampler_gauss_3d_vector(sampler,r,h) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double), intent(in) :: r,h
+    end subroutine mui_create_sampler_gauss_3d_vector
+
 
     subroutine mui_create_sampler_gauss_3dx_f(sampler,r,h) bind(C)
       import :: c_ptr,c_double
@@ -363,6 +377,12 @@ module mui_3d_f
       type(c_ptr), intent(out), target :: sampler
       real(kind=c_double), intent(in), target :: r
     end subroutine mui_create_sampler_pseudo_n2_linear_3d_f
+
+    subroutine mui_create_sampler_pseudo_n2_linear_3d_vector(sampler,r) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double), intent(in), target :: r
+    end subroutine mui_create_sampler_pseudo_n2_linear_3d_vector
 
     subroutine mui_create_sampler_pseudo_n2_linear_3dx_f(sampler,r) bind(C)
       import :: c_ptr,c_double
@@ -848,6 +868,13 @@ module mui_3d_f
       real(kind=c_double),intent(in) :: tolerance
     end subroutine mui_create_temporal_sampler_exact_3d_f
 
+    subroutine mui_create_temporal_sampler_exact_3d_vector(sampler,tolerance) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double),intent(in) :: tolerance
+    end subroutine mui_create_temporal_sampler_exact_3d_vector
+
+
     subroutine mui_create_temporal_sampler_exact_3dx_f(sampler,tolerance) bind(C)
       import :: c_ptr,c_double
       type(c_ptr), intent(out), target :: sampler
@@ -879,6 +906,13 @@ module mui_3d_f
       real(kind=c_double),intent(in) :: cutoff,sigma
     end subroutine mui_create_temporal_sampler_gauss_3d_f
 
+    subroutine mui_create_temporal_sampler_gauss_3d_vector(sampler,cutoff,sigma) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double),intent(in) :: cutoff,sigma
+    end subroutine mui_create_temporal_sampler_gauss_3d_vector
+
+
     subroutine mui_create_temporal_sampler_gauss_3dx_f(sampler,cutoff,sigma) bind(C)
       import :: c_ptr,c_double
       type(c_ptr), intent(out), target :: sampler
@@ -909,6 +943,13 @@ module mui_3d_f
       type(c_ptr), intent(out), target :: sampler
       real(kind=c_double),intent(in) :: lower,upper
     end subroutine mui_create_temporal_sampler_mean_3d_f
+
+    subroutine mui_create_temporal_sampler_mean_3d_vector(sampler,lower,upper) bind(C)
+      import :: c_ptr,c_double
+      type(c_ptr), intent(out), target :: sampler
+      real(kind=c_double),intent(in) :: lower,upper
+    end subroutine mui_create_temporal_sampler_mean_3d_vector
+
 
     subroutine mui_create_temporal_sampler_mean_3dx_f(sampler,lower,upper) bind(C)
       import :: c_ptr,c_double
@@ -1595,6 +1636,22 @@ module mui_3d_f
       real(kind=c_double), intent(in) :: point_1,point_2,point_3,value
     end subroutine mui_push_3d_f
 
+    ! subroutine mui_push_3d_vector(uniface,attr,point_1,point_2,point_3,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,value_1,value_2,value_3
+    ! end subroutine mui_push_3d_vector
+
+    subroutine mui_push_3d_vector(uniface,attr,point_1,point_2,point_3,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3
+      real(kind=c_double), dimension(3),intent(in) ::value
+    end subroutine mui_push_3d_vector
+
+
     subroutine mui_push_3dx_f(uniface,attr,point_1,point_2,point_3,value) bind(C)
       import :: c_ptr,c_char,c_double
       type(c_ptr), intent(in), value :: uniface
@@ -1809,6 +1866,26 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_exact_exact_3d_f
 
+    ! subroutine mui_fetch_exact_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_exact_exact_3d_vector
+
+    subroutine mui_fetch_exact_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_exact_exact_3d_vector
+
+    
+
     subroutine mui_fetch_exact_exact_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -1855,6 +1932,25 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_exact_gauss_3d_f
 
+    ! subroutine mui_fetch_exact_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_exact_gauss_3d_vector
+
+    subroutine mui_fetch_exact_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_exact_gauss_3d_vector
+
+
     subroutine mui_fetch_exact_gauss_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -1900,6 +1996,24 @@ module mui_3d_f
       real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_exact_mean_3d_f
+
+    ! subroutine mui_fetch_exact_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_exact_mean_3d_vector
+
+    subroutine mui_fetch_exact_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_exact_mean_3d_vector
 
     subroutine mui_fetch_exact_mean_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
@@ -1993,6 +2107,25 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_gauss_exact_3d_f
 
+    ! subroutine mui_fetch_gauss_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_gauss_exact_3d_vector
+
+    subroutine mui_fetch_gauss_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_gauss_exact_3d_vector
+
+
     subroutine mui_fetch_gauss_exact_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -2039,6 +2172,24 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_gauss_gauss_3d_f
 
+    ! subroutine mui_fetch_gauss_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_gauss_gauss_3d_vector
+
+    subroutine mui_fetch_gauss_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3),intent(out) :: value
+    end subroutine mui_fetch_gauss_gauss_3d_vector
+
     subroutine mui_fetch_gauss_gauss_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -2084,6 +2235,25 @@ module mui_3d_f
       real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_gauss_mean_3d_f
+
+    ! subroutine mui_fetch_gauss_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+    !   temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_gauss_mean_3d_vector
+
+    subroutine mui_fetch_gauss_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
+      temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_gauss_mean_3d_vector
+
 
     subroutine mui_fetch_gauss_mean_3dx_f(uniface,attr,point_1,point_2,point_3,t,spatial_sampler, &
       temporal_sampler,return_value) bind(C)
@@ -2769,6 +2939,27 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_pseudo_n2_linear_exact_3d_f
 
+    ! subroutine mui_fetch_pseudo_n2_linear_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+    !   spatial_sampler,temporal_sampler,value_1,value_2,value_3) bind(C)
+    !     import :: c_ptr,c_char,c_double
+    !     type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !     character(kind=c_char), intent(in) :: attr(*)
+    !     real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !     real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    !   end subroutine mui_fetch_pseudo_n2_linear_exact_3d_vector
+
+    subroutine mui_fetch_pseudo_n2_linear_exact_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+      spatial_sampler,temporal_sampler,value) bind(C)
+        import :: c_ptr,c_char,c_double
+        type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+        character(kind=c_char), intent(in) :: attr(*)
+        real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+        real(kind=c_double), dimension(3), intent(out) :: value
+      end subroutine mui_fetch_pseudo_n2_linear_exact_3d_vector
+
+    
+
+
     subroutine mui_fetch_pseudo_n2_linear_exact_3dx_f(uniface,attr,point_1,point_2,point_3,t,&
     spatial_sampler,temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -2815,6 +3006,26 @@ module mui_3d_f
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_pseudo_n2_linear_gauss_3d_f
 
+    ! subroutine mui_fetch_pseudo_n2_linear_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+    ! spatial_sampler,temporal_sampler,value_1,value_2,value_3) bind(C)
+    !   import :: c_ptr,c_char,c_double
+    !   type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !   character(kind=c_char), intent(in) :: attr(*)
+    !   real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !   real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_pseudo_n2_linear_gauss_3d_vector
+
+    subroutine mui_fetch_pseudo_n2_linear_gauss_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+    spatial_sampler,temporal_sampler,value) bind(C)
+      import :: c_ptr,c_char,c_double
+      type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+      character(kind=c_char), intent(in) :: attr(*)
+      real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+      real(kind=c_double), dimension(3), intent(out) :: value
+    end subroutine mui_fetch_pseudo_n2_linear_gauss_3d_vector
+
+
+
     subroutine mui_fetch_pseudo_n2_linear_gauss_3dx_f(uniface,attr,point_1,point_2,point_3,t,&
     spatial_sampler,temporal_sampler,return_value) bind(C)
       import :: c_ptr,c_char,c_double
@@ -2860,6 +3071,25 @@ module mui_3d_f
       real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
       real(kind=c_double), intent(out) :: return_value
     end subroutine mui_fetch_pseudo_n2_linear_mean_3d_f
+
+    ! subroutine mui_fetch_pseudo_n2_linear_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+    !   spatial_sampler,temporal_sampler,value_1,value_2,value_3) bind(C)
+    !     import :: c_ptr,c_char,c_double
+    !     type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+    !     character(kind=c_char), intent(in) :: attr(*)
+    !     real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+    !     real(kind=c_double), intent(out) :: value_1,value_2,value_3
+    ! end subroutine mui_fetch_pseudo_n2_linear_mean_3d_vector
+
+    subroutine mui_fetch_pseudo_n2_linear_mean_3d_vector(uniface,attr,point_1,point_2,point_3,t,&
+      spatial_sampler,temporal_sampler,value) bind(C)
+        import :: c_ptr,c_char,c_double
+        type(c_ptr), intent(in), value :: uniface,spatial_sampler,temporal_sampler
+        character(kind=c_char), intent(in) :: attr(*)
+        real(kind=c_double), intent(in) :: point_1,point_2,point_3,t
+        real(kind=c_double), dimension(3),intent(out) :: value
+    end subroutine mui_fetch_pseudo_n2_linear_mean_3d_vector
+
 
     subroutine mui_fetch_pseudo_n2_linear_mean_3dx_f(uniface,attr,point_1,point_2,point_3,t,&
     spatial_sampler,temporal_sampler,return_value) bind(C)
@@ -14418,6 +14648,16 @@ module mui_3d_f
       type(c_ptr), intent(in), value :: uniface
       integer(kind=c_int), intent(in) :: synchronised
     end subroutine mui_announce_recv_disable_3t_f
+    
+    !******************************************
+    !* MUI sending peer size functions                  *
+    !******************************************    
+    subroutine mui_sendig_peers_size_3d_f(uniface,peer_size) bind(C)
+      import :: c_ptr,c_int
+      type(c_ptr), intent(in), value :: uniface
+      integer(kind=c_int), intent(out) :: peer_size
+    end subroutine mui_sendig_peers_size_3d_f
+    
 
     !******************************************
     !* MUI barrier functions                  *

@@ -101,7 +101,7 @@ namespace mui {
 			using point_type = point<REAL,D>;\
 			using time_type = REAL;\
 			using iterator_type = INT;\
-			using data_types = type_list<uint32_t,uint64_t,int32_t,int64_t,double,float,std::string>;\
+			using data_types = type_list<uint32_t,uint64_t,int32_t,int64_t,double,float,point<REAL,3>,std::string>;\
 		} mui_config_##SUFFIX;\
 		using uniface##SUFFIX = uniface<config_##SUFFIX>;\
 		using point##SUFFIX = point<config_##SUFFIX::REAL,config_##SUFFIX::D>;\
